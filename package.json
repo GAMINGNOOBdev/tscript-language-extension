@@ -1,0 +1,52 @@
+{
+  "name": "tscript-programming-language",
+  "displayName": "TScript Programming Language",
+  "description": "Teaching Script (TScript) Language Support",
+  "version": "1.0.0",
+  "repository": {
+    "url": "https://github.com/GAMINGNOOBdev/tscript-language-extension"
+  },
+  "icon": "./fileicons/tscript.png",
+  "engines": {
+    "vscode": "^1.82.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "main": "./client/out/extension.js",
+  "activationEvents": [
+    "onLanguage:tscript"
+  ],
+  "publisher": "GAMINGNOOBdev",
+  "contributes": {
+    "languages": [{
+      "id": "tscript",
+      "aliases": ["Teaching Script", "tscript"],
+      "extensions": [".tscript"],
+      "configuration": "./language-configuration.json",
+      "icon": {
+        "dark": "./fileicons/tscript.png",
+        "light": "./fileicons/tscript.png"
+      }
+    }],
+    "grammars": [{
+      "language": "tscript",
+      "scopeName": "source.tscript",
+      "path": "./syntaxes/tscript.tmLanguage.json"
+    }]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "cd client && tsc -p ./ && cd .. && cd server && dotnet build",
+    "watch": "cd client && tsc -watch -p ./ && cd .. && cd server && dotnet build"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.82.0",
+    "@types/node": "^18.0.0",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "vscode-jsonrpc": "^8.2.1",
+    "vscode-languageclient": "^9.0.1"
+  }
+}

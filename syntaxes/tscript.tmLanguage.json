@@ -1,0 +1,195 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "TScript",
+    "scopeName": "source.tscript",
+    "fileTypes": [
+        "tscript"
+    ],
+    "patterns": [
+        {
+            "include": "#comments"
+        },
+        {
+            "include": "#strings"
+        },
+        {
+            "include": "#entities"
+        },
+        {
+            "include": "#keywords"
+        },
+        {
+            "include": "#constants"
+        },
+        {
+            "include": "#operators"
+        },
+        {
+            "include": "#punctuation"
+        },
+        {
+            "include": "#variables"
+        }
+    ],
+        "repository": {
+        "comments": {
+            "patterns": [
+                {
+                    "name": "comment.block.tscript",
+                    "begin": "#\\*",
+                    "end": "\\*#",
+                    "captures": {
+                        "0": {
+                            "name": "punctuation.definition.comment.tscript"
+                        }
+                    }
+                },
+                {
+                    "name": "comment.line.number-sign.tscript",
+                    "begin": "#",
+                    "end": "$",
+                    "captures": {
+                        "1": {
+                            "name": "punctuation.definition.comment.tscript"
+                        }
+                    }
+                }
+            ]
+        },
+        "strings": {
+            "name": "string.quoted.double.tscript",
+            "begin": "\"",
+            "end": "\"",
+            "patterns": [
+            {
+                "name": "constant.character.escape.tscript",
+                "match": "\\\\(\"|'|r|n|t|f|b|/|\\\\|u[0-9a-fA-F]{4})"
+            }
+            ]
+        },
+        "entities": {
+            "patterns": [
+                {
+                    "name": "entity.name.function.declaration.tscript",
+                    "match": "(?<=\\b(function|constructor)\\s+)[a-zA-Z_][a-zA-Z0-9_]*"
+                },
+                {
+                    "name": "entity.name.class.declaration.tscript",
+                    "match": "(?<=\\bclass\\s+)[a-zA-Z_][a-zA-Z0-9_]*"
+                },
+                {
+                    "name": "entity.name.namespace.declaration.tscript",
+                    "match": "(?<=\\bnamespace\\s+)[a-zA-Z_][a-zA-Z0-9_]*"
+                },
+                {
+                    "name": "entity.name.function.call.tscript",
+                    "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)(?=\\s*\\()"
+                }
+            ]
+        },
+        "keywords": {
+            "patterns": [
+                {
+                    "name": "keyword.control.tscript",
+                    "match": "\\b(if|then|else|for|do|while|break|continue|return|try|catch|throw|from|use|as)\\b"
+                },
+                {
+                    "name": "storage.type.tscript",
+                    "match": "\\b(var|function|class|namespace|constructor)\\b"
+                },
+                {
+                    "name": "storage.modifier.tscript",
+                    "match": "\\b(public|protected|private|static)\\b"
+                },
+                {
+                    "name": "keyword.operator.logical.tscript",
+                    "match": "\\b(and|or|not|xor)\\b"
+                }
+            ]
+        },
+        "constants": {
+            "patterns": [
+                {
+                    "name": "constant.language.tscript",
+                    "match": "\\b(true|false|null|this|super)\\b"
+                },
+                {
+                    "name": "constant.numeric.real.tscript",
+                    "match": "\\b(\\d+\\.\\d+([eE][+-]?\\d+)?|\\d+[eE][+-]?\\d+)\\b"
+                },
+                {
+                    "name": "constant.numeric.integer.tscript",
+                    "match": "\\b\\d+\\b"
+                }
+            ]
+        },
+        "operators": {
+            "patterns": [
+                {
+                    "name": "keyword.operator.assignment.tscript",
+                    "match": "(=|\\+=|-=|\\*=|/=|%=|\\^=)"
+                },
+                {
+                    "name": "keyword.operator.comparison.tscript",
+                    "match": "(==|!=|<=|>=|<|>)"
+                },
+                {
+                    "name": "keyword.operator.arithmetic.tscript",
+                    "match": "(\\+|\\-|\\*|//|/|%|\\^)"
+                }
+            ]
+        },
+        "punctuation": {
+            "patterns": [
+                {
+                    "name": "punctuation.terminator.statement.tscript",
+                    "match": ";"
+                },
+                {
+                    "name": "punctuation.separator.comma.tscript",
+                    "match": ","
+                },
+                {
+                    "name": "punctuation.accessor.dot.tscript",
+                    "match": "\\."
+                },
+                {
+                    "name": "punctuation.separator.key-value.tscript",
+                    "match": ":"
+                },
+                {
+                    "name": "punctuation.section.block.begin.tscript",
+                    "match": "\\{"
+                },
+                {
+                    "name": "punctuation.section.block.end.tscript",
+                    "match": "\\}"
+                },
+                {
+                    "name": "punctuation.section.bracket.begin.tscript",
+                    "match": "\\["
+                },
+                {
+                    "name": "punctuation.section.bracket.end.tscript",
+                    "match": "\\]"
+                },
+                {
+                    "name": "punctuation.section.parens.begin.tscript",
+                    "match": "\\("
+                },
+                {
+                    "name": "punctuation.section.parens.end.tscript",
+                    "match": "\\)"
+                }
+            ]
+        },
+        "variables": {
+            "patterns": [
+                {
+                    "name": "variable.other.tscript",
+                    "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+                }
+            ]
+        }
+    }
+}
