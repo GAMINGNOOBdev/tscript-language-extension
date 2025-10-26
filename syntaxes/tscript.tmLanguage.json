@@ -91,7 +91,7 @@
             "patterns": [
                 {
                     "name": "keyword.control.tscript",
-                    "match": "\\b(if|then|else|for|do|while|break|continue|return|try|catch|throw|from|use|as)\\b"
+                    "match": "\\b(if|then|else|for|do|while|in|break|continue|return|try|catch|throw|from|use|as)\\b"
                 },
                 {
                     "name": "storage.type.tscript",

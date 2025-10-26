@@ -18,10 +18,13 @@ export function activate(context: ExtensionContext)
     let serverPath = context.asAbsolutePath(
         path.join('server', 'bin', 'Debug', 'net8.0', 'TScriptLanguageServer.dll')
     );
+    let config = workspace.getConfiguration('tscript');
+    let logFileLocation : string = config.get("log_file_location", "");
+    let enableDebugLog : boolean = config.get("enable_debug_log", false);
 
     let serverOptions: ServerOptions = {
-        run: { command: serverCommand, args: [serverPath] },
-        debug: { command: serverCommand, args: [serverPath] }
+        run: { command: serverCommand, args: [serverPath, enableDebugLog ? "true" : "false", logFileLocation] },
+        debug: { command: serverCommand, args: [serverPath, enableDebugLog ? "true" : "false", logFileLocation] }
     };
 
     let clientOptions: LanguageClientOptions = {

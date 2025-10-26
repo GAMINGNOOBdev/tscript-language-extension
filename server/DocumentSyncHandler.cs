@@ -1,16 +1,16 @@
-using System.Text.RegularExpressions;
 using MediatR;
 using OmniSharp.Extensions.LanguageServer.Protocol;
-using OmniSharp.Extensions.LanguageServer.Protocol.Client.Capabilities;
-using OmniSharp.Extensions.LanguageServer.Protocol.Document;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using OmniSharp.Extensions.LanguageServer.Protocol.Server;
-using OmniSharp.Extensions.LanguageServer.Protocol.Server.Capabilities;
 using OmniSharp.Extensions.LanguageServer.Protocol.Window;
+using OmniSharp.Extensions.LanguageServer.Protocol.Document;
+using OmniSharp.Extensions.LanguageServer.Protocol.Client.Capabilities;
+using OmniSharp.Extensions.LanguageServer.Protocol.Server.Capabilities;
+using OmniSharpRange = OmniSharp.Extensions.LanguageServer.Protocol.Models.Range;
 
 namespace TScriptLanguageServer;
 
-public class TScriptDocumentSyncHandler : ITextDocumentSyncHandler
+public class DocumentSyncHandler : ITextDocumentSyncHandler
 {
     private readonly ILanguageServerFacade _router;
     private readonly BufferManager _bufferManager;
@@ -22,9 +22,7 @@ public class TScriptDocumentSyncHandler : ITextDocumentSyncHandler
         }
     );
 
-    private TextSynchronizationCapability _capability = new();
-
-    public TScriptDocumentSyncHandler(ILanguageServerFacade router, BufferManager bufferManager)
+    public DocumentSyncHandler(ILanguageServerFacade router, BufferManager bufferManager)
     {
         _router = router;
         _bufferManager = bufferManager;
@@ -41,32 +39,20 @@ public class TScriptDocumentSyncHandler : ITextDocumentSyncHandler
         };
     }
 
-    public TextDocumentChangeRegistrationOptions GetRegistrationOptions(TextSynchronizationCapability capability, ClientCapabilities clientCapabilities)
-    {
-        return GetRegistrationOptions();
-    }
+    public TextDocumentChangeRegistrationOptions GetRegistrationOptions(TextSynchronizationCapability capability, ClientCapabilities clientCapabilities) => GetRegistrationOptions();
 
-    public TextDocumentAttributes GetTextDocumentAttributes(Uri uri)
-    {
-        return new(uri, "tscript");
-    }
-
-    public TextDocumentAttributes GetTextDocumentAttributes(DocumentUri uri)
-    {
-        return new(uri, "tscript");
-    }
+    public TextDocumentAttributes GetTextDocumentAttributes(Uri uri) => new(uri, "tscript");
+    public TextDocumentAttributes GetTextDocumentAttributes(DocumentUri uri) => new(uri, "tscript");
 
     public Task<Unit> Handle(DidChangeTextDocumentParams request, CancellationToken cancellationToken)
     {
         string documentPath = request.TextDocument.Uri.ToString();
         string? text = request.ContentChanges.FirstOrDefault()?.Text;
-
-        OmniSharp.Extensions.LanguageServer.Protocol.Models.Range? range = request.ContentChanges.FirstOrDefault()?.Range;
+        OmniSharpRange? range = request.ContentChanges.FirstOrDefault()?.Range;
         _bufferManager.UpdateBuffer(documentPath, text, range);
 
         _router.Window.LogInfo($"Updated buffer for document: {documentPath}");
-        //ValidateDocument(documentPath);
-
+        ValidateDocument(documentPath);
         return Unit.Task;
     }
 
@@ -75,7 +61,7 @@ public class TScriptDocumentSyncHandler : ITextDocumentSyncHandler
         string documentPath = request.TextDocument.Uri.ToString();
         string text = request.TextDocument.Text;
         _bufferManager.UpdateBuffer(documentPath, text);
-        //ValidateDocument(documentPath);
+        ValidateDocument(documentPath);
         return Unit.Task;
     }
 
@@ -83,6 +69,7 @@ public class TScriptDocumentSyncHandler : ITextDocumentSyncHandler
     {
         string message = "\"public Task<Unit> Handle(DidCloseTextDocumentParams request, CancellationToken cancellationToken)\" is not implemented!";
         _router.Window.LogWarning(message);
+        Logging.LogWarning(message);
         return Unit.Task;
     }
 
@@ -90,6 +77,7 @@ public class TScriptDocumentSyncHandler : ITextDocumentSyncHandler
     {
         string message = "\"public Task<Unit> Handle(DidSaveTextDocumentParams request, CancellationToken cancellationToken)\" is not implemented!";
         _router.Window.LogWarning(message);
+        Logging.LogWarning(message);
         return Unit.Task;
     }
 
@@ -97,6 +85,7 @@ public class TScriptDocumentSyncHandler : ITextDocumentSyncHandler
     {
         string message = "\"TextDocumentOpenRegistrationOptions IRegistration<TextDocumentOpenRegistrationOptions, TextSynchronizationCapability>.GetRegistrationOptions(TextSynchronizationCapability capability, ClientCapabilities clientCapabilities)\" is not implemented!";
         _router.Window.LogWarning(message);
+        Logging.LogWarning(message);
         return new();
     }
 
@@ -104,6 +93,7 @@ public class TScriptDocumentSyncHandler : ITextDocumentSyncHandler
     {
         string message = "\"TextDocumentCloseRegistrationOptions IRegistration<TextDocumentCloseRegistrationOptions, TextSynchronizationCapability>.GetRegistrationOptions(TextSynchronizationCapability capability, ClientCapabilities clientCapabilities)\" is not implemented!";
         _router.Window.LogWarning(message);
+        Logging.LogWarning(message);
         return new();
     }
 
@@ -111,11 +101,13 @@ public class TScriptDocumentSyncHandler : ITextDocumentSyncHandler
     {
         string message = "\"TextDocumentSaveRegistrationOptions IRegistration<TextDocumentSaveRegistrationOptions, TextSynchronizationCapability>.GetRegistrationOptions(TextSynchronizationCapability capability, ClientCapabilities clientCapabilities)\" is not implemented!";
         _router.Window.LogWarning(message);
+        Logging.LogWarning(message);
         return new();
     }
 
     private void ValidateDocument(string documentPath)
     {
+        /*
         string text = _bufferManager.GetBuffer(documentPath);
         string[] lines = text.Split([ "\n", "\r\n" ], StringSplitOptions.None);
         List<Diagnostic> diagnostics = [];
@@ -127,7 +119,7 @@ public class TScriptDocumentSyncHandler : ITextDocumentSyncHandler
             "null", "or", "private", "protected", "public", "return", "static", 
             "super", "then", "this", "throw", "true", "try", "use", "var", "while", "xor"
         ];
-        
+
         Regex varDeclarationRegex = new(@"\bvar\s+([a-zA-Z_][a-zA-Z0-9_]*)");
         Regex funcDeclarationRegex = new(@"\bfunction\s+([a-zA-Z_][a-zA-Z0-9_]*)");
         Regex identifierInLineRegex = new(@"\b[a-zA-Z_][a-zA-Z0-9_]*\b");
@@ -143,7 +135,7 @@ public class TScriptDocumentSyncHandler : ITextDocumentSyncHandler
                 diagnostics.Add(new Diagnostic
                 {
                     Severity = DiagnosticSeverity.Error,
-                    Range = new OmniSharp.Extensions.LanguageServer.Protocol.Models.Range(i, line.IndexOf('"'), i, line.Length),
+                    Range = new OmniSharpRange(i, line.IndexOf('"'), i, line.Length),
                     Message = "Unterminated string literal.",
                     Source = "tscript-lsp"
                 });
@@ -158,7 +150,7 @@ public class TScriptDocumentSyncHandler : ITextDocumentSyncHandler
                     diagnostics.Add(new Diagnostic
                     {
                         Severity = DiagnosticSeverity.Error,
-                        Range = new OmniSharp.Extensions.LanguageServer.Protocol.Models.Range(i, match.Index, i, match.Index + match.Length),
+                        Range = new OmniSharpRange(i, match.Index, i, match.Index + match.Length),
                         Message = $"Identifier '{identifier}' has already been declared.",
                         Source = "tscript-ls"
                     });
@@ -176,7 +168,7 @@ public class TScriptDocumentSyncHandler : ITextDocumentSyncHandler
                     diagnostics.Add(new Diagnostic
                     {
                         Severity = DiagnosticSeverity.Error,
-                        Range = new OmniSharp.Extensions.LanguageServer.Protocol.Models.Range(i, funcMatch.Index, i, funcMatch.Index + funcMatch.Length),
+                        Range = new OmniSharpRange(i, funcMatch.Index, i, funcMatch.Index + funcMatch.Length),
                         Message = $"Function '{identifier}' has already been declared.",
                         Source = "tscript-ls"
                     });
@@ -193,7 +185,7 @@ public class TScriptDocumentSyncHandler : ITextDocumentSyncHandler
                 diagnostics.Add(new Diagnostic
                 {
                     Severity = DiagnosticSeverity.Warning,
-                    Range = new OmniSharp.Extensions.LanguageServer.Protocol.Models.Range(i, line.Length, i, line.Length + 1),
+                    Range = new OmniSharpRange(i, line.Length, i, line.Length + 1),
                     Message = "Missing semicolon.",
                     Source = "tscript-ls"
                 });
@@ -215,7 +207,7 @@ public class TScriptDocumentSyncHandler : ITextDocumentSyncHandler
                     diagnostics.Add(new Diagnostic
                     {
                         Severity = DiagnosticSeverity.Error,
-                        Range = new OmniSharp.Extensions.LanguageServer.Protocol.Models.Range(i, match.Index, i, match.Index + identifier.Length),
+                        Range = new OmniSharpRange(i, match.Index, i, match.Index + identifier.Length),
                         Message = $"Identifier '{identifier}' is not defined.",
                         Source = "tscript-ls"
                     });
@@ -225,12 +217,6 @@ public class TScriptDocumentSyncHandler : ITextDocumentSyncHandler
         
         _router.Client.SendNotification(TextDocumentNames.PublishDiagnostics, 
             new PublishDiagnosticsParams { Uri = documentPath, Diagnostics = new Container<Diagnostic>(diagnostics) });
-    }
-
-    private static bool IsDeclaration(string line, string identifier)
-    {
-        Regex varPattern = new($@"\bvar\s+.*{identifier}");
-        Regex funcPattern = new($@"\bfunction\s+{identifier}");
-        return varPattern.IsMatch(line) || funcPattern.IsMatch(line);
+        */
     }
 }

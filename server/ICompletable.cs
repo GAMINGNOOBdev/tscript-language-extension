@@ -4,6 +4,8 @@ namespace TScriptLanguageServer;
 
 public interface ICompletable
 {
-    string Name { get; }
-    CompletionItemKind CompletionKind { get; }
+    public string Name { get; }
+    public string? TypeName { get; }
+    public string? Description { get; }
+    public CompletionItemKind CompletionKind { get; }
 }

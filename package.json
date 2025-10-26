@@ -33,7 +33,22 @@
       "language": "tscript",
       "scopeName": "source.tscript",
       "path": "./syntaxes/tscript.tmLanguage.json"
-    }]
+    }],
+    "configuration": {
+      "title": "tscript",
+      "properties": {
+        "tscript.enable_debug_log": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether language server debug information should be printed (will increase log file size SIGNIFICANTLY!)"
+        },
+        "tscript.log_file_location": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the language server log file"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
