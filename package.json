@@ -2,18 +2,18 @@
   "name": "tscript-programming-language",
   "displayName": "TScript Programming Language",
   "description": "Teaching Script (TScript) Language Support",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": {
     "url": "https://github.com/GAMINGNOOBdev/tscript-language-extension"
   },
-  "icon": "./fileicons/tscript.png",
+  "icon": "icons/tscript.png",
   "engines": {
     "vscode": "^1.82.0"
   },
   "categories": [
     "Programming Languages"
   ],
-  "main": "./client/out/extension.js",
+  "main": "client/out/extension.js",
   "activationEvents": [
     "onLanguage:tscript"
   ],
@@ -23,16 +23,16 @@
       "id": "tscript",
       "aliases": ["Teaching Script", "tscript"],
       "extensions": [".tscript"],
-      "configuration": "./language-configuration.json",
+      "configuration": "language-configuration.json",
       "icon": {
-        "dark": "./fileicons/tscript.png",
-        "light": "./fileicons/tscript.png"
+        "dark": "icons/tscript.png",
+        "light": "icons/tscript.png"
       }
     }],
     "grammars": [{
       "language": "tscript",
       "scopeName": "source.tscript",
-      "path": "./syntaxes/tscript.tmLanguage.json"
+      "path": "syntaxes/tscript.tmLanguage.json"
     }],
     "configuration": {
       "title": "tscript",
@@ -50,10 +50,13 @@
       }
     }
   },
+	"extensionDependencies": [
+		"ms-dotnettools.vscode-dotnet-runtime"
+	],
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "cd client && tsc -p ./ && cd .. && cd server && dotnet build",
-    "watch": "cd client && tsc -watch -p ./ && cd .. && cd server && dotnet build"
+    "compile": "cd client && tsc -p . && cd .. && cd server && dotnet build",
+    "watch": "cd client && tsc -watch -p . && cd .. && cd server && dotnet build"
   },
   "devDependencies": {
     "@types/vscode": "^1.82.0",
