@@ -1,5 +1,6 @@
-using System.Collections.Concurrent;
 namespace TScriptLanguageServer.Language;
+
+using System.Collections.Concurrent;
 
 public class TokenManager
 {

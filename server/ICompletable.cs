@@ -1,6 +1,6 @@
-using OmniSharp.Extensions.LanguageServer.Protocol.Models;
-
 namespace TScriptLanguageServer;
+
+using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 
 public interface ICompletable
 {

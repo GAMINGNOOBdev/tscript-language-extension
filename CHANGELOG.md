@@ -8,3 +8,10 @@
 
 ## 1.0.1
 - Fixed extension dependencies
+
+## 1.0.2
+- Added tooltips when hovering over text
+- Added proper parsing for namespaces, classes, functions and variables
+- Fixed completions slightly
+- Added sub-namespace completions (only of depth 1)
+- Respecting public/private methods of classes when using them outside the class' context

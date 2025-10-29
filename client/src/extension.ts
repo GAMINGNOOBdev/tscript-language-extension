@@ -23,8 +23,8 @@ export function activate(context: ExtensionContext)
     let enableDebugLog : boolean = config.get("enable_debug_log", false);
 
     let serverOptions: ServerOptions = {
-        run: { command: serverCommand, args: [serverPath, enableDebugLog ? "true" : "false", logFileLocation] },
-        debug: { command: serverCommand, args: [serverPath, enableDebugLog ? "true" : "false", logFileLocation] }
+        run: { command: serverCommand, args: [serverPath, context.asAbsolutePath("stdlib"), enableDebugLog ? "true" : "false", logFileLocation] },
+        debug: { command: serverCommand, args: [serverPath, context.asAbsolutePath("stdlib"), enableDebugLog ? "true" : "false", logFileLocation] }
     };
 
     let clientOptions: LanguageClientOptions = {

@@ -1,0 +1,37 @@
+###
+### STANDARD LIBRARY CORE FUNCTIONS
+###
+
+# termination/error checking
+function terminate() {}
+function assert(condition, message) {}
+function error(message) {}
+
+# checks/useful utility functions
+function same(first, second) {}
+function version() {}
+
+# standard input/output functions
+function print(text) {}
+function alert(text) {}
+function confirm(text) {}
+function prompt(text) {}
+
+# time related functions
+function wait(ms) {}
+function time() {}
+function localtime() {}
+
+# json data handling
+function exists(key) {}
+function load(key) {}
+function save(key, value) {}
+function listKeys() {}
+
+# utility function
+function deepcopy(value) {}
+
+# event system functions
+function setEventHandler(event, handler) {}
+function enterEventMode() {}
+function quitEventMode(result = null) {}

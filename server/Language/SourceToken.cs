@@ -1,6 +1,6 @@
-using OmniSharp.Extensions.LanguageServer.Protocol.Models;
-
 namespace TScriptLanguageServer.Language;
+
+using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 
 public enum SourceTokenType
 {
@@ -63,13 +63,14 @@ public class SourceToken(SourceTokenType type = SourceTokenType.INVALID, string 
     public int StartPos { get; private set; } = startpos;
     public int EndPos => StartPos + Name.Length;
 
-    public bool IsInternalType() => Specifications.DataTypes.Contains(Name);
-    public override string ToString() => $"SourceToken({Enum.GetName(typeof(SourceTokenType), Type)} - \"{Name}\" - '{Line}:{StartPos})'";
+    public bool IsInternalType => Specifications.DataTypes.Contains(Name);
+    public bool IsAccessModifier => Specifications.AccessModifier.Contains(Name);
+    public override string ToString() => $"SourceToken({Enum.GetName(typeof(SourceTokenType), Type)} - \"{Name}\" - '{Line}:{StartPos}')";
     public bool InRange(int line, int pos) => line == Line && StartPos <= pos && pos <= EndPos;
 
     public string? Description{ get
     {
-        if (IsInternalType())
+        if (IsInternalType)
             return "Internal Data Type";
 
         if (Type == SourceTokenType.KEYWORD)

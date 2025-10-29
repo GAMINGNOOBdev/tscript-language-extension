@@ -1,10 +1,10 @@
+namespace TScriptLanguageServer;
+
 using TScriptLanguageServer.Language;
 using OmniSharp.Extensions.LanguageServer.Protocol.Client.Capabilities;
 using OmniSharp.Extensions.LanguageServer.Protocol.Document;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using OmniSharp.Extensions.LanguageServer.Protocol.Server;
-
-namespace TScriptLanguageServer;
 
 public class ScriptCompletionHandler : ICompletionHandler, ICompletionResolveHandler
 {
@@ -67,7 +67,7 @@ public class ScriptCompletionHandler : ICompletionHandler, ICompletionResolveHan
                     Label = x.Name,
                     Kind = x.CompletionKind,
                     InsertText = x.Name,
-                }), isIncomplete: completions.Count > 1));
+                }), isIncomplete: false));
 
             return await Task.FromResult(new CompletionList(completions.Select(x => new CompletionItem
             {
@@ -76,7 +76,7 @@ public class ScriptCompletionHandler : ICompletionHandler, ICompletionResolveHan
                 TextEdit = new TextEdit
                 {
                     NewText = x.Name,
-                    Range = new OmniSharp.Extensions.LanguageServer.Protocol.Models.Range(
+                    Range = new Range(
                         new Position
                         {
                             Line = token.Line-1,
@@ -87,7 +87,7 @@ public class ScriptCompletionHandler : ICompletionHandler, ICompletionResolveHan
                             Character = request.Position.Character
                         })
                 }
-            }), isIncomplete: completions.Count > 1));
+            }), isIncomplete: false));
         }
         catch (Exception e)
         {

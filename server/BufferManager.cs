@@ -1,9 +1,9 @@
+namespace TScriptLanguageServer;
+
 using System.Text;
 using System.Collections.Concurrent;
 using TScriptLanguageServer.Language;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
-
-namespace TScriptLanguageServer;
 
 public class Buffer
 {

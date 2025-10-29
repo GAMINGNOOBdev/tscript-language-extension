@@ -17,14 +17,23 @@ public record SpecialCharacter(
 
 public class Specifications
 {
+    public static string? StdLibPath = null;
+
     public static string[] DataTypes { get; } = [
         "var",
+    ];
+
+    public static string[] AccessModifier { get; } = [
+        "public",
+        "protected",
+        "private",
     ];
 
     public static Keyword[] Keywords { get; } = [
         new("null", SourceTokenType.NULL),
         new("if", SourceTokenType.KEYWORD),
         new("in", SourceTokenType.KEYWORD),
+        new("include", SourceTokenType.KEYWORD),
         new("then", SourceTokenType.KEYWORD),
         new("else", SourceTokenType.KEYWORD),
         new("for", SourceTokenType.KEYWORD),

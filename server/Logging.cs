@@ -1,7 +1,7 @@
+namespace TScriptLanguageServer;
+
 using System.Diagnostics;
 using System.Reflection;
-
-namespace TScriptLanguageServer;
 
 public class Logging
 {

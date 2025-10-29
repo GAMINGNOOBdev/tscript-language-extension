@@ -8,6 +8,8 @@ public class Token(int line = int.MinValue, int startpos = int.MinValue, string 
     public virtual string Name { get; private set; } = name;
     public virtual string? Description => Name;
     public virtual string? TypeName => Name;
+    public bool IsStatic { get; set; } = false;
+    public Visibility TokenVisibility { get; set; } = Visibility.Public;
 
     public int StartPos { get; private set; } = startpos;
     public int Line { get; private set; } = line;
@@ -18,5 +20,26 @@ public class Token(int line = int.MinValue, int startpos = int.MinValue, string 
         Name = token.Name;
         Line = token.Line;
         StartPos = token.StartPos;
+    }
+
+    public enum Visibility
+    {
+        Public,
+        Private,
+        Protected,
+    }
+
+    public static Visibility GetVisibility(string visibility)
+    {
+        if (visibility == "public")
+            return Visibility.Public;
+        
+        if (visibility == "private")
+            return Visibility.Private;
+        
+        if (visibility == "protected")
+            return Visibility.Protected;
+
+        return Visibility.Public;
     }
 }
