@@ -31,7 +31,7 @@ bitmap. # <-- completions would appear after you type the dot (".")
 - **Log file location**: Set a custom path for the log file (default location is right next to the server binary)
 
 ## Known Issues
-Dont do too long lines it breaks the entire tokenization system qwq
+See [Bugs](./BUGS.md).
 
 ## Release Notes
 See [Changelog](./CHANGELOG.md).

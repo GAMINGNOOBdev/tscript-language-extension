@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { workspace, ExtensionContext } from 'vscode';
+import { workspace, ExtensionContext, commands, window } from 'vscode';
 import {
     ServerOptions,
     TransportKind,
@@ -10,11 +10,35 @@ import {
 } from 'vscode-languageclient/node';
 
 
-let client : LanguageClient;
+interface ICommandResult {
+    dotnetPath: string;
+}
 
-export function activate(context: ExtensionContext)
+let client : LanguageClient;
+const REQUIRED_DOTNET_VERSION = "8.0";
+
+async function getDotnetPath() : Promise<string> {
+    let dotnetPath = await commands.executeCommand<ICommandResult>(
+        'dotnet.acquire',
+        {
+            version: REQUIRED_DOTNET_VERSION,
+            requestingExtensionId: 'GAMINGNOOBdev.tscript-programming-language',
+            acquisitionContext: "runtime"
+        }
+    );
+
+    if (!dotnetPath || !dotnetPath?.dotnetPath)
+    {
+        window.showErrorMessage(`Failed to install or locate .NET Runtime ${REQUIRED_DOTNET_VERSION}. Please install it manually or check your extension logs.`);
+        return "dotnet";
+    }
+
+    return dotnetPath.dotnetPath;
+}
+
+export async function activate(context: ExtensionContext)
 {
-    let serverCommand = 'dotnet';
+    let serverCommand = await getDotnetPath();
     let serverPath = context.asAbsolutePath(
         path.join('server', 'bin', 'Debug', 'net8.0', 'TScriptLanguageServer.dll')
     );
