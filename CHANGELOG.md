@@ -15,3 +15,6 @@
 - Fixed completions slightly
 - Added sub-namespace completions (only of depth 1)
 - Respecting public/private methods of classes when using them outside the class' context
+
+## 1.0.3
+- Fixed dependencies not loading/initializing properly
