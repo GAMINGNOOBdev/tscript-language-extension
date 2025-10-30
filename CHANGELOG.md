@@ -18,3 +18,6 @@
 
 ## 1.0.3
 - Fixed dependencies not loading/initializing properly
+
+## 1.0.4
+- Added standard library completion support

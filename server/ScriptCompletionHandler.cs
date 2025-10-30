@@ -55,6 +55,9 @@ public class ScriptCompletionHandler : ICompletionHandler, ICompletionResolveHan
             List<ICompletable> completions = token.GetCompletions();
             foreach(ICompletable i in buffer.TokenParser.GetCompletions(token, tokenPair.Item2))
                 completions.Add(i);
+            if (TokenManager.Instance != null)
+                foreach(ICompletable i in TokenManager.Instance.GetCompletions(token, tokenPair.Item2))
+                    completions.Add(i);
 
             Logging.LogDebug($"completion count: {completions.Count}");
             Logging.LogDebug($"completions:");

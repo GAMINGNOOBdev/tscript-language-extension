@@ -58,6 +58,8 @@ public class TooltipHandler : IHoverHandler
             List<ICompletable> parsedTokens = buffer.TokenParser.GetCompletions(token, iter);
             if (parsedTokens.Count > 0)
                 completable = buffer.TokenParser.GetCompletion(token);
+            if (TokenManager.Instance != null)
+                completable = TokenManager.Instance.GetCompletion(token, completable);
 
             if (completable.Description == null)
                 return Task.FromResult<Hover?>(null);

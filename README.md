@@ -18,13 +18,13 @@ bitmap. # <-- completions would appear after you type the dot (".")
 - Syntax highlighting
 - Full completion support
 - Respecting public and private methods
+- Standard library integration
 
 ## WIP Features
 - Cross file completions (aka having a function in one file and still recognizing it's existence in another one)
-- Standard library integration
 - `use namespace <name>` actually working lol
 - Derived classes contributing to the completions
-- Completions for nested namespaces / classes inside nested namespaces
+- Completions for nested namespaces / classes inside nested namespaces (currently only working on a depth of 1)
 
 ## Extension Settings
 - **Enable Debug Log**: Enables logging debugging information useful for debugging the language server (disabled by default)

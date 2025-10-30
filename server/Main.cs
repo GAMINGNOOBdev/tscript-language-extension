@@ -28,7 +28,7 @@ public class Program
 
     public static async Task Main(string[] args)
     {
-
+        _ = new TokenManager(); // create a public instance of the token manager
         string? currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         string logFileName = "tscript.language.server.log";
         string logFilePath = Path.Combine(currentDir ?? "", logFileName);
@@ -45,6 +45,9 @@ public class Program
         Logging.OutputStream = new(logFilePath);
         for (int i = 0; i < args.Length; i++)
             Logging.LogInfo($"launch argument {i}: '{args[i]}'");
+
+        if (Specifications.StdLibPath != null)
+            ParseStdLibFunctions(Specifications.StdLibPath);
 
         try
         {
@@ -72,5 +75,11 @@ public class Program
     static void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton<BufferManager>();
+    }
+
+    private static void ParseStdLibFunctions(string path)
+    {
+        foreach (string file in Directory.EnumerateFiles(path))
+            TokenManager.Instance?.ParseFile(File.ReadAllText(file));
     }
 }

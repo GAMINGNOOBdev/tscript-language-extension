@@ -1,53 +1,67 @@
 namespace TScriptLanguageServer.Language;
 
 using System.Collections.Concurrent;
+using TScriptLanguageServer.Language.Tokens;
 
 public class TokenManager
 {
     public static TokenManager? Instance { get; private set; }
 
-    private readonly ConcurrentBag<Token> tokens = [];
+    private readonly ConcurrentBag<TokenParser> tokenParsers = [];
 
     public TokenManager()
     {
         Instance = this;
     }
 
-    public void AddToken(Token token)
+    public void ParseFile(string contents)
     {
-        if (token == null)
-            return;
-
-        if (tokens.Contains(token))
-        {
-            int index = tokens.ToList().IndexOf(token);
-            tokens.ElementAt(index).Copy(token);
-            return;
-        }
-
-        tokens.Add(token);
+        Tokenizer tk = new();
+        tk.ParseFile(contents);
+        TokenParser tp = new();
+        tp.Parse(tk);
+        tokenParsers.Add(tp);
     }
 
-    public void RemoveToken(string name)
+    public List<ICompletable> GetCompletions(SourceToken token, SourceTokenIterator sourceIterator)
     {
-        int index = tokens.ToList().FindIndex((Token t) => {
-            return t.Name == name;
-        });
+        List<ICompletable> results = [];
+
+        foreach (TokenParser tp in tokenParsers)
+            foreach(ICompletable ic in tp.GetCompletions(token, sourceIterator))
+                results.Add(ic);
+
+        return results;
     }
 
-    public Token GetToken(string name)
+    public ICompletable GetCompletion(SourceToken token, ICompletable completable)
     {
-        foreach (Token token in tokens)
+        ICompletable? result = null;
+
+        foreach (TokenParser tp in tokenParsers)
         {
-            if (token.Name == name)
-                return token;
+            ICompletable ic = tp.GetCompletion(token);
+            if (ic == token)
+                continue;
+            
+            result = ic;
+            break;
         }
 
-        return new();
+        if (result == null)
+            return completable;
+
+        return result;
     }
 
     public bool FindFunction(SourceToken token)
     {
+        foreach (TokenParser tp in tokenParsers)
+            foreach (Token t in tp.Functions)
+                if (t is FunctionToken function)
+                    if (function.Name == token.Name)
+                        return true;
+
         return false;
     }
 }
